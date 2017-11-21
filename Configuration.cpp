@@ -52,6 +52,7 @@ void CConfig::Setup()
 	SetupValue(g_Options.Visuals.Weapon, false, ("Visuals"), ("Weapon"));
 	SetupValue(g_Options.Visuals.Skeleton, false, ("Visuals"), ("Skeleton"));
 	SetupValue(g_Options.Visuals.Snaplines, false, ("Visuals"), ("SnapLines"));
+	SetupValue(g_Options.Visuals.ChamsEnabled, false, ("Visuals"), ("ChamsEnabled"));
 	SetupValue(g_Options.Visuals.Chams, 0, ("Visuals"), ("Chams"));
 	SetupValue(g_Options.Visuals.Hands, 0, ("Visuals"), ("Hands"));
 	SetupValue(g_Options.Visuals.Money, false, ("Visuals"), ("Money"));
