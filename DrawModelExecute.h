@@ -30,6 +30,8 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 		C_BaseEntity* pModelEntity = (C_BaseEntity*)g_EntityList->GetClientEntity(pInfo.entity_index);
 		C_BaseEntity* pLocal = (C_BaseEntity*)g_EntityList->GetClientEntity(g_Engine->GetLocalPlayer());
 
+
+
 		int ChamsStyle = g_Options.Visuals.Chams;
 		int HandsStyle = g_Options.Visuals.Hands;
 		if ((ChamsStyle != 0 && g_Options.Visuals.Filter.Players && strstr(ModelName, "models/player")))
@@ -48,54 +50,123 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 							Color col_vis;
 							Color col_invis;
 
-							bool TeamCheck = pModelEntity->GetTeamNum() == pLocal->GetTeamNum(); //check for team 
+							int TeamCheck = pModelEntity->GetTeamNum() == pLocal->GetTeamNum(); //check for team 
 
+						
+							bool IsVis = MiscFunctions::IsVisible(pLocal, pModelEntity, Head);
 
 							float alpha = 1.f;
 							if (pModelEntity->HasGunGameImmunity())
 								alpha = 0, 5.f;
 
 
-							if (TeamCheck)
+							if (TeamCheck == TEAM_CS_T)
 							{
-
-								col_vis = Color(g_Options.Visuals.chamsPlyrTVis[0] * 255, g_Options.Visuals.chamsPlyrTVis[1] * 255, g_Options.Visuals.chamsPlyrTVis[2] * 255);
+								if (IsVis)
+								{
+									col_vis = Color(g_Options.Visuals.chamsPlyrTVis[0] * 255, g_Options.Visuals.chamsPlyrTVis[1] * 255, g_Options.Visuals.chamsPlyrTVis[2] * 255);
+								}
+								else
+								{
+									col_invis = Color(g_Options.Visuals.chamsPlyrTInvis[0] * 255, g_Options.Visuals.chamsPlyrTInvis[1] * 255, g_Options.Visuals.chamsPlyrTInvis[2] * 255);
+					
+								}
 							}
 							else
 							{
-								col_vis = Color(g_Options.Visuals.chamsPlyrCTVis[0] * 255, g_Options.Visuals.chamsPlyrCTVis[1] * 255, g_Options.Visuals.chamsPlyrCTVis[2] * 255);
-							}
+								if (IsVis)
+								{
+									col_vis = Color(g_Options.Visuals.chamsPlyrCTVis[0] * 255, g_Options.Visuals.chamsPlyrCTVis[1] * 255, g_Options.Visuals.chamsPlyrCTVis[2] * 255);
+								}
+								else
+								{
+									col_invis = Color(g_Options.Visuals.chamsPlyrCTInvis[0] * 255, g_Options.Visuals.chamsPlyrCTInvis[1] * 255, g_Options.Visuals.chamsPlyrCTInvis[2] * 255);
+								}
 
-							if (TeamCheck)
-							{
-								col_invis = Color(g_Options.Visuals.chamsPlyrTInvis[0] * 255, g_Options.Visuals.chamsPlyrTInvis[1] * 255, g_Options.Visuals.chamsPlyrTInvis[2] * 255);
+								
 							}
-							else
-							{
-								col_invis = Color(g_Options.Visuals.chamsPlyrCTInvis[0] * 255, g_Options.Visuals.chamsPlyrCTInvis[1] * 255, g_Options.Visuals.chamsPlyrCTInvis[2] * 255);
-							}
-
-
+				
 
 							if (ChamsStyle == 1) //Chams Through Walls
 							{
 
-								g_RenderView->SetColorModulation(col_vis.Base());
-								g_RenderView->SetBlend(alpha);
-								ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-								g_ModelRender->ForcedMaterialOverride(notignorez);
-								g_ModelRender->ForcedMaterialOverride(ignorez);
-								ForceMaterial(Color(col_vis), ignorez);
+								if (TeamCheck == TEAM_CS_T)
+								{
 
-								g_RenderView->SetColorModulation(col_vis.Base());
-								g_RenderView->SetBlend(alpha);
+									if (IsVis)
+									{
+										g_RenderView->SetColorModulation(col_vis.Base());
+										g_RenderView->SetBlend(alpha);
+										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+										g_ModelRender->ForcedMaterialOverride(ignorez);
+										ForceMaterial(Color(col_vis), ignorez);
+
+										g_RenderView->SetColorModulation(col_vis.Base());
+										g_RenderView->SetBlend(alpha);
+									}
+									else
+									{
+										g_RenderView->SetColorModulation(col_invis.Base());
+										g_RenderView->SetBlend(alpha);
+										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+										g_ModelRender->ForcedMaterialOverride(ignorez);
+										ForceMaterial(Color(col_invis), ignorez);
+
+										g_RenderView->SetColorModulation(col_invis.Base());
+										g_RenderView->SetBlend(alpha);
+									}
+
+								}
+								else
+								{
+									if (IsVis)
+									{
+										g_RenderView->SetColorModulation(col_vis.Base());
+										g_RenderView->SetBlend(alpha);
+										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+										g_ModelRender->ForcedMaterialOverride(ignorez);
+										ForceMaterial(Color(col_vis), ignorez);
+
+										g_RenderView->SetColorModulation(col_vis.Base());
+										g_RenderView->SetBlend(alpha);
+									}
+									else
+									{
+										g_RenderView->SetColorModulation(col_invis.Base());
+										g_RenderView->SetBlend(alpha);
+										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+										g_ModelRender->ForcedMaterialOverride(ignorez);
+										ForceMaterial(Color(col_invis), ignorez);
+
+										g_RenderView->SetColorModulation(col_invis.Base());
+										g_RenderView->SetBlend(alpha);
+									}
+								}
+
+
 
 							}
 
 							if (ChamsStyle == 2) //Visible only
 							{
-								g_RenderView->SetColorModulation(col_invis.Base());
-								g_ModelRender->ForcedMaterialOverride(notignorez);
+								if (TeamCheck == TEAM_CS_T)
+								{
+									
+										g_RenderView->SetColorModulation(col_vis.Base());
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+								
+								}
+								else
+								{
+									g_RenderView->SetColorModulation(col_vis.Base());
+									g_ModelRender->ForcedMaterialOverride(notignorez);
+								}
+
+					
 							}
 
 						}
@@ -107,7 +178,8 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 		{
 			if (HandsStyle == 1) //No hands
 			{
-				bool TeamCheck = pLocal->GetTeamNum();
+				int TeamCheck = pLocal->GetTeamNum();
+
 				if (pLocal->IsAlive())
 				{
 					if (TeamCheck)
@@ -123,7 +195,7 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 			}
 			if (HandsStyle == 2) //Transparent
 			{
-				bool TeamCheck = pLocal->GetTeamNum();
+			   int TeamCheck = pLocal->GetTeamNum();
 				if (pLocal)
 				{
 					if (pLocal->IsAlive())
@@ -142,7 +214,7 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 
 			if (HandsStyle == 3) //WireFrame
 			{
-				bool TeamCheck = pLocal->GetTeamNum();
+				int TeamCheck = pLocal->GetTeamNum();
 				if (pLocal)
 				{
 					if (pLocal->IsAlive())
@@ -172,7 +244,7 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 				Color colorchamshands;
 				Color colorchamshands2;
 
-				bool TeamCheck = pLocal->GetTeamNum();
+				int TeamCheck = pLocal->GetTeamNum();
 
 				if (pLocal)
 				{
