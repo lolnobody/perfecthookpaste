@@ -47,12 +47,18 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 
 						if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0)
 						{
-							Color col_vis;
-							Color col_invis;
+							Color col_visCT;
+							Color col_invisCT;
 
-							int TeamCheck = pModelEntity->GetTeamNum() == pLocal->GetTeamNum(); //check for team 
+							Color col_visT;
+							Color col_invisT;
 
-						
+
+
+
+							int TeamCheck = pModelEntity->GetTeamNum() == pLocal->GetTeamNum(); //check for team
+
+
 							bool IsVis = MiscFunctions::IsVisible(pLocal, pModelEntity, Head);
 
 							float alpha = 1.f;
@@ -60,15 +66,15 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 								alpha = 0, 5.f;
 
 
-							if (TeamCheck == TEAM_CS_T)
+							if (TeamCheck)
 							{
 								if (IsVis)
 								{
-									col_vis = Color(g_Options.Visuals.chamsPlyrTVis[0] * 255, g_Options.Visuals.chamsPlyrTVis[1] * 255, g_Options.Visuals.chamsPlyrTVis[2] * 255);
+									col_visT = Color(g_Options.Visuals.chamsPlyrTVis[0] * 255, g_Options.Visuals.chamsPlyrTVis[1] * 255, g_Options.Visuals.chamsPlyrTVis[2] * 255);
 								}
 								else
 								{
-									col_invis = Color(g_Options.Visuals.chamsPlyrTInvis[0] * 255, g_Options.Visuals.chamsPlyrTInvis[1] * 255, g_Options.Visuals.chamsPlyrTInvis[2] * 255);
+									col_invisT = Color(g_Options.Visuals.chamsPlyrTInvis[0] * 255, g_Options.Visuals.chamsPlyrTInvis[1] * 255, g_Options.Visuals.chamsPlyrTInvis[2] * 255);
 					
 								}
 							}
@@ -76,11 +82,11 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 							{
 								if (IsVis)
 								{
-									col_vis = Color(g_Options.Visuals.chamsPlyrCTVis[0] * 255, g_Options.Visuals.chamsPlyrCTVis[1] * 255, g_Options.Visuals.chamsPlyrCTVis[2] * 255);
+									col_visCT = Color(g_Options.Visuals.chamsPlyrCTVis[0] * 255, g_Options.Visuals.chamsPlyrCTVis[1] * 255, g_Options.Visuals.chamsPlyrCTVis[2] * 255);
 								}
 								else
 								{
-									col_invis = Color(g_Options.Visuals.chamsPlyrCTInvis[0] * 255, g_Options.Visuals.chamsPlyrCTInvis[1] * 255, g_Options.Visuals.chamsPlyrCTInvis[2] * 255);
+									col_invisCT = Color(g_Options.Visuals.chamsPlyrCTInvis[0] * 255, g_Options.Visuals.chamsPlyrCTInvis[1] * 255, g_Options.Visuals.chamsPlyrCTInvis[2] * 255);
 								}
 
 								
@@ -90,83 +96,100 @@ void __fastcall hkDrawModelExecute(void* thisptr, int edx, void* ctx, void* stat
 							if (ChamsStyle == 1) //Chams Through Walls
 							{
 
-								if (TeamCheck == TEAM_CS_T)
+								if (TeamCheck)
 								{
 
-									if (IsVis)
+									if (IsVis) //vis
 									{
-										g_RenderView->SetColorModulation(col_vis.Base());
+										g_RenderView->SetColorModulation(col_visT.Base());
 										g_RenderView->SetBlend(alpha);
 										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 										g_ModelRender->ForcedMaterialOverride(notignorez);
 										g_ModelRender->ForcedMaterialOverride(ignorez);
-										ForceMaterial(Color(col_vis), ignorez);
+										ForceMaterial(Color(col_visT), ignorez);
 
-										g_RenderView->SetColorModulation(col_vis.Base());
+										g_RenderView->SetColorModulation(col_visT.Base());
 										g_RenderView->SetBlend(alpha);
 									}
-									else
+									else //invis
 									{
-										g_RenderView->SetColorModulation(col_invis.Base());
+										g_RenderView->SetColorModulation(col_invisT.Base());
 										g_RenderView->SetBlend(alpha);
 										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
 										g_ModelRender->ForcedMaterialOverride(notignorez);
 										g_ModelRender->ForcedMaterialOverride(ignorez);
-										ForceMaterial(Color(col_invis), ignorez);
+										ForceMaterial(Color(col_invisT), ignorez);
 
-										g_RenderView->SetColorModulation(col_invis.Base());
+										g_RenderView->SetColorModulation(col_invisT.Base());
 										g_RenderView->SetBlend(alpha);
 									}
 
+								}else {
+
+									if (IsVis) //vis
+									{
+										g_RenderView->SetColorModulation(col_visCT.Base());
+										g_RenderView->SetBlend(alpha);
+										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+										g_ModelRender->ForcedMaterialOverride(ignorez);
+										ForceMaterial(Color(col_visCT), ignorez);
+
+										g_RenderView->SetColorModulation(col_visCT.Base());
+										g_RenderView->SetBlend(alpha);
+									}
+									else // invis
+									{
+										g_RenderView->SetColorModulation(col_invisCT.Base());
+										g_RenderView->SetBlend(alpha);
+										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+										g_ModelRender->ForcedMaterialOverride(ignorez);
+										ForceMaterial(Color(col_invisCT), ignorez);
+
+										g_RenderView->SetColorModulation(col_invisCT.Base());
+										g_RenderView->SetBlend(alpha);
+									}
 								}
-								else
-								{
-									if (IsVis)
-									{
-										g_RenderView->SetColorModulation(col_vis.Base());
-										g_RenderView->SetBlend(alpha);
-										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-										g_ModelRender->ForcedMaterialOverride(notignorez);
-										g_ModelRender->ForcedMaterialOverride(ignorez);
-										ForceMaterial(Color(col_vis), ignorez);
-
-										g_RenderView->SetColorModulation(col_vis.Base());
-										g_RenderView->SetBlend(alpha);
-									}
-									else
-									{
-										g_RenderView->SetColorModulation(col_invis.Base());
-										g_RenderView->SetBlend(alpha);
-										ofunc(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-										g_ModelRender->ForcedMaterialOverride(notignorez);
-										g_ModelRender->ForcedMaterialOverride(ignorez);
-										ForceMaterial(Color(col_invis), ignorez);
-
-										g_RenderView->SetColorModulation(col_invis.Base());
-										g_RenderView->SetBlend(alpha);
-									}
-								}
+								
 
 
 
 							}
 
+
+
 							if (ChamsStyle == 2) //Visible only
 							{
-								if (TeamCheck == TEAM_CS_T)
+
+								if (TeamCheck)
 								{
-									
-										g_RenderView->SetColorModulation(col_vis.Base());
+									if (IsVis)
+									{
+										g_RenderView->SetColorModulation(col_visT.Base());
 										g_ModelRender->ForcedMaterialOverride(notignorez);
-								
+									}
+									else
+									{
+										g_RenderView->SetColorModulation(col_invisT.Base());
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+									}
 								}
 								else
 								{
-									g_RenderView->SetColorModulation(col_vis.Base());
-									g_ModelRender->ForcedMaterialOverride(notignorez);
-								}
+									if (IsVis)
+									{
+										g_RenderView->SetColorModulation(col_visCT.Base());
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+									}
+									else
+									{
+										g_RenderView->SetColorModulation(col_invisCT.Base());
+										g_ModelRender->ForcedMaterialOverride(notignorez);
+									}
 
-					
+								}
+						
 							}
 
 						}
