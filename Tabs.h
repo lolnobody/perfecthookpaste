@@ -130,6 +130,12 @@ void RenderVisuals()
 		ImGui::Checkbox(("DLight"), &g_Options.Visuals.DLight);
 		ImGui::Checkbox(("GrenadeESP"), &g_Options.Visuals.GrenadeESP);
 		ImGui::Checkbox(("C4"), &g_Options.Visuals.C4);
+		ImGui::Checkbox(("Money"), &g_Options.Visuals.Money);
+		ImGui::Checkbox(("IsScoped"), &g_Options.Visuals.IsScoped);
+		ImGui::Checkbox(("IsHasDefuser"), &g_Options.Visuals.IsHasDefuser);
+		ImGui::Checkbox(("IsDefusing"), &g_Options.Visuals.IsDefusing);
+		ImGui::Checkbox(("IsFlashed"), &g_Options.Visuals.IsFlashed);
+
 
 		ImGui::BeginChild(("ChamsInfo"), ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 63 * 2));
 		{
@@ -146,39 +152,21 @@ void RenderVisuals()
 		}ImGui::EndChild();
 
 		ImGui::Spacing();
-
-		ImGui::BeginChild(("DrawInfo"), ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 80 * 2)); //70
-		{
-			ImGui::Separator();
-			ImGui::Text("Draw Options");
-			ImGui::Checkbox(("Money"), &g_Options.Visuals.Money);
-			ImGui::Checkbox(("IsScoped"), &g_Options.Visuals.IsScoped); 
-			ImGui::Checkbox(("IsHasDefuser"), &g_Options.Visuals.IsHasDefuser);
-			ImGui::Checkbox(("IsDefusing"), &g_Options.Visuals.IsDefusing); 
-			ImGui::Checkbox(("IsFlashed"), &g_Options.Visuals.IsFlashed); 
-			ImGui::Spacing();
-			ImGui::Spacing();
-			ImGui::Separator();
-
-		}ImGui::EndChild();
-
+	
 	}
-	ImGui::NextColumn();
-	{
-		ImGui::BeginChild(("Filter"), ImVec2(ImGui::GetWindowContentRegionWidth() * 0.5f, 57 * 1.95));
-		{
-			ImGui::Checkbox((" All Players"), &g_Options.Visuals.Filter.Players);
-			ImGui::Checkbox((" Enemy Only"), &g_Options.Visuals.Filter.EnemyOnly);
-			ImGui::Checkbox((" Visible Only"), &g_Options.Visuals.Filter.VisibleOnly);
-			ImGui::Checkbox((" Local Player"), &g_Options.Visuals.Filter.pLocalPlayer);
+	
+	
+		ImGui::Checkbox((" All Players"), &g_Options.Visuals.Filter.Players);
+		ImGui::Checkbox((" Enemy Only"), &g_Options.Visuals.Filter.EnemyOnly);
+		ImGui::Checkbox((" Local Player"), &g_Options.Visuals.Filter.pLocalPlayer);
 
-		} ImGui::EndChild();
+		ImGui::Separator();
 
 		ImGui::Text("World");
 		ImGui::Checkbox(("C4 - World"), &g_Options.Visuals.C4World);
 		ImGui::Checkbox(("Weapons - World"), &g_Options.Visuals.WeaponsWorld);
 
-	}
+
 
 
 	ImGui::NextColumn();
@@ -198,9 +186,29 @@ void RenderVisuals()
 
 void RenderMisc()
 {
-	ImGui::Columns(3, NULL, true);
+	
+	static int tabb = 0;
+
+
+	if (ImGui::Button(XorStr("Misc 1"), ImVec2(150, 25)))
 	{
-		ImGui::Text(("Part-1"));
+		tabb = 0;
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button(XorStr("Misc 2"), ImVec2(150, 25)))
+	{
+		tabb = 1;
+	}
+
+
+
+	ImGui::Spacing();
+	ImGui::Spacing();
+
+	if (tabb == 0)
+	{
 		ImGui::Checkbox("Name Stealer", &g_Options.Misc.silentstealer);
 		ImGui::SameLine();
 		if (ImGui::Button("Silent exploit"))
@@ -221,10 +229,13 @@ void RenderMisc()
 		ImGui::Checkbox(("Competitive Rank"), &g_Options.Misc.ServerRankRevealAll);
 		ImGui::Checkbox(("SpecList"), &g_Options.Misc.SpecList);
 
-	}
-	ImGui::NextColumn();
-	{
-		ImGui::Text(("Part-2"));
+
+
+
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+
 		ImGui::Combo(("Spammer"), &g_Options.Misc.spammer, spammers, ARRAYSIZE(spammers));
 		ImGui::Checkbox("phook clantag", &g_Options.Misc.syncclantag);
 		ImGui::PushItemWidth(100);
@@ -269,14 +280,35 @@ void RenderMisc()
 		}
 
 
-	}
-	ImGui::NextColumn();
-	{
-		ImGui::Text(("Part-3"));
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::Spacing();
+
 		ImGui::Checkbox(("Chrome - World"), &g_Options.Misc.ChromeWorld);
 		ImGui::Checkbox(("NightMode - World"), &g_Options.Misc.nightMode);
 		ImGui::Checkbox(("DisablePostProcessing"), &g_Options.Misc.disablepost);
 		ImGui::PushItemWidth(120); ImGui::Combo(("Theme Changer"), &g_Options.Menu.Theme, themes, ARRAYSIZE(themes));
+
+	}
+
+
+	if (tabb == 1)
+	{
+
+		ImGui::Separator();
+
+
+		ImGui::Spacing();
+
+
+		ImGui::Combo(("GrenadeHelperColors"), &g_Options.Misc.grenadecolors, grenadeClrType, ARRAYSIZE(grenadeClrType));
+
+
+		ImGui::Spacing();
+
+	    ImGui::Separator();
+
+
 	}
 
 }
@@ -535,6 +567,8 @@ void RenderColorsTab()
 	}ImGui::EndChild();
 
 }
+
+
 
 void RenderConfigTab()
 {

@@ -148,7 +148,6 @@ struct Variables
 		{
 			bool Players;
 			bool EnemyOnly;
-			bool VisibleOnly;
 			bool pLocalPlayer;
 
 		} Filter;
@@ -185,6 +184,8 @@ struct Variables
 
 		//Disable Post-Processing
 		bool disablepost;
+
+		int grenadecolors;
 
 	} Misc;
 	struct
